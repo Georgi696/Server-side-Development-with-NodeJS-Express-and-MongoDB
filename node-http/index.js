@@ -39,7 +39,7 @@ const server = http.createServer((req,res) => {
     }
     else{
         res.statusCode = 404;
-        res.setHeader("Content File", "text.html");
+        res.setHeader("Content File", "text/html");
         res.end("<html><body><h1>Error 404 " + req.method + " not found</h1></body></html>");    
     }
 })
