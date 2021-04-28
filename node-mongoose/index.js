@@ -7,20 +7,26 @@ const connect = mongoose.connect(url);
 connect.then((db) => {
     console.log("Connencted to server");
 
-    var newDish = Dishes({
-        name:"Donut",
+    Dishes.create({
+        name:"Pizzaasasd",
         description: "New Test"
-    });
-
-    newDish.save()
+    })
     .then((dish) => {
         console.log("Inserted\n",dish);
 
-        return Dishes.find({}).exec();
+        return Dishes.findByIdAndUpdate(dish._id,{$set:{description:"Updated Test"}},{new:true}).exec();
     })
-    .then((dishes) => {
-        console.log("Found\n",dishes);
+    .then((dish) => {
+        console.log("Found\n",dish," commenst: ",dish.comments);
+        dish.comments.push({
+            rating:10,
+            comment:'I\'m getting a sinking feeling!',
+            author:"Georgi Aleksiev"
+        });
 
+        return dish.save();
+    }).then((dish) => {
+        console.log(dish);
         return Dishes.remove({});
     })
     .then(() => {
