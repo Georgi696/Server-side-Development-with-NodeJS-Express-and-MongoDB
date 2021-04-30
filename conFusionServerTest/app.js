@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
 const Dishes = require('./models/dishes');
+const Promos = require('./models/promotions');
 
 
 var dishRouter = require('./routes/dishRouter');
