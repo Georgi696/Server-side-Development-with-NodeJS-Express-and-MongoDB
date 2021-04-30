@@ -137,11 +137,11 @@ dishRouter.route('/:dishId/comments')
     }, (err) => next(err)).catch((err) => next(err))
 })
 //route dishId/comments/commentsId
-dishRouter.route('/:dishId/comments/commentId')
+dishRouter.route('/:dishId/comments/:commentId')
 .get((req,res,next) => {
     Dishes.findById(req.params.dishId)
     .then((dish) => {
-        if (dishId != null && dish.comments.dishId(req.params.commentId) != null) {
+        if (dish != null && dish.comments.id(req.params.commentId) != null) {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
             res.json(dish.comments.id(req.params.commentId));

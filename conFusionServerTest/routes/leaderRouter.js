@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const Leader = require('../models/leaders');
-const { resourceLimits } = require('node:worker_threads');
 const leaderRouter = express.Router();
 
 leaderRouter.use(bodyParser.json())
