@@ -52,47 +52,25 @@ app.use('/users', usersRouter);
 
 function auth(req,res,next) {
   
-  console.log(req.session);
+    console.log(req.session);
 
-  if (!req.session.user) {
-  
-    console.log(req.headers);
-    var authHeader = req.headers.authorization;
-    if (!authHeader) {
+    if (!req.session.user) {
       var err = new Error("You are not authenticated!");
-      res.setHeader("WWW-Authenticate","Basic");
-      err.status = 401;
-      next(err);
-      return;
-    }
-  
-    var auth = new Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':');
-    var username = auth[0];
-    var password = auth[1];
-
-    if (username === "admin" && password === "password") {
-      req.session.user = "admin";
-      next(); //authorized
+      err.status = 403;
+      return next(err);     
     }
     else{
-      var err = new Error("You are not authenticated!");
-      res.setHeader("WWW-Authenticate","Basic");
-      err.status = 401;
-      return next(err);
+      if(req.session.user === "authenticated"){
+        next()
+      }
+      else{
+        var err = new Error('You are not authenticated!');
+        err.status = 403;
+        next(err);
+      }    
     }
   }
-  else{
-    if (req.session.user === "admin") {
-      console.log("req.session ", req.session)
-      next();
-    }
-    else{
-      var err = new Error('You are not authenticated!');
-      err.status = 401;
-      next(err);    
-    }
-  }
-}
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(auth);
