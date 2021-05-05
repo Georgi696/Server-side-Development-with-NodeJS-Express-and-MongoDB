@@ -17,6 +17,8 @@ var leaderRouter = require('./routes/leaderRouter');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+const passport = require('passport');
+const authenticate = require('./auth');
 
 var db = mongoose.connect('mongodb://localhost:27017', {useNewUrlParser: true, dbName: 'swag-shop' });
 const connect = mongoose.connect(db);
@@ -47,30 +49,24 @@ app.use(session({
   store: new FileStore
 }));
 
+app.use(passport.initialize());
+app.use(passport.session())
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-function auth(req,res,next) {
-  
+function auth(req,res,next) {  
     console.log(req.session);
 
-    if (!req.session.user) {
+    if (!req.user) {
       var err = new Error("You are not authenticated!");
       err.status = 403;
       return next(err);     
     }
     else{
-      if(req.session.user === "authenticated"){
         next()
-      }
-      else{
-        var err = new Error('You are not authenticated!');
-        err.status = 403;
-        next(err);
-      }    
-    }
   }
-
+}
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(auth);
