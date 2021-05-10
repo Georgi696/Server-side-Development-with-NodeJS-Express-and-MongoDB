@@ -9,6 +9,7 @@ var passport = require('passport');
 var authenticate = require('./auth');
 const mongoose = require('mongoose');
 const config = require('./config');
+const cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -32,7 +33,6 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
   
 app.use(passport.initialize());
 
