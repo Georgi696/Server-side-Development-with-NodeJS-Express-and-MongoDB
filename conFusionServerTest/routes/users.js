@@ -7,6 +7,19 @@ const authenticate = require('../auth.js');
 
 router.use(bodyParser.json());
 
+router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, (req,res,next) => {
+  User.find({}, (err,user) => {
+    if(err){
+      next(err);
+    }
+    else{
+      res.statusCode = 200;
+      res.setHeader("Content-Type","application/json");
+      res.json(user);
+    }
+  })
+})
+
 router.post('/signup',(req,res,next) => {
     User.register(new User ({username:req.body.username}), 
       req.body.password, (err, user) =>{
@@ -50,11 +63,6 @@ router.get('/logout', (req, res) => {
     req.session.destroy();
     res.clearCookie('session-id');
     res.redirect('/');
-  }
-  else {
-    var err = new Error('You are not logged in!');
-    err.status = 403;
-    next(err);
   }
 });
 
